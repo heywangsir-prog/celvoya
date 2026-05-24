@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🎂 我的专属生日礼物 🎂</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400&display=swap');
+
+        /* 基础重置 */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html {
+            width: 100%; height: 100%; overflow: hidden;
+            font-family: 'Noto Serif SC', 'PingFang SC', 'Microsoft YaHei', serif;
+            background: #00000a;
+        }
+
+        /* ── 1. 宇宙星空背景层 ── */
+        #cosmosCanvas, #cinematicCanvas {
+            position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none;
+        }
+        #cosmosCanvas { z-index: 0; }
+        #cinematicCanvas { z-index: 10; }
+
+        /* ── 2. 首屏开始画面 ── */
+        #start-screen {
+            position: fixed; inset: 0; z-index: 999; cursor: pointer;
+            transition: opacity 0.4s ease;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background: rgba(0, 0, 8, 0.55); backdrop-filter: blur(2px);
+        }
+        .start-icon {
+            width: 60px; height: 60px; margin-bottom: 28px; border: 1px solid rgba(180, 210, 255, 0.3);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            animation: breathe 3s ease-in-out infinite;
+        }
+        .start-icon::before {
+            content: ''; width: 10px; height: 10px; background: rgba(160, 200, 255, 0.9);
+            border-radius: 50%; box-shadow: 0 0 12px 4px rgba(120, 180, 255, 0.5);
+        }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(120, 180, 255, 0); }
+            50% { transform: scale(1.08); box-shadow: 0 0 30px 8px rgba(80, 140, 255, 0.2); }
+        }
+        .pulse-text { font-size: 14px; letter-spacing: 6px; color: rgba(190, 215, 255, 0.75); font-weight: 300; animation: fadeWave 3s ease-in-out infinite; }
+        .sub-text { font-size: 11px; color: rgba(100, 130, 170, 0.6); margin-top: 20px; letter-spacing: 3px; font-weight: 300; }
+        @keyframes fadeWave { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* ── 3. 倒计时卡片界面 ── */
+        #main-content {
+            position: relative; z-index: 20; width: 100%; height: 100%;
+            display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .card {
+            background: rgba(4, 8, 22, 0.52); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+            border-radius: 20px; border: 1px solid rgba(140, 190, 255, 0.13);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            padding: 44px 50px; width: 88%; max-width: 460px;
+            opacity: 0; transform: translateY(36px); 
+            /* 极速淡出：0.5秒 */
+            transition: all 0.5s ease;
+        }
+        .card.show { opacity: 1; transform: translateY(0); }
+        .card h1 { color: rgba(220, 235, 255, 0.88); font-size: 15px; margin-bottom: 30px; letter-spacing: 5px; font-weight: 300; text-shadow: 0 0 20px rgba(100, 180, 255, 0.4); }
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin-bottom: 36px; }
+        .time-box { background: rgba(255, 255, 255, 0.03); border-radius: 10px; padding: 14px 10px; min-width: 66px; border: 1px solid rgba(255, 255, 255, 0.07); }
+        .time-box .num { display: block; color: rgba(200, 230, 255, 0.95); font-size: 30px; font-weight: 300; text-shadow: 0 0 20px rgba(140, 200, 255, 0.7); font-variant-numeric: tabular-nums; }
+        .time-box .label { display: block; color: rgba(100, 140, 190, 0.6); font-size: 9px; text-transform: uppercase; margin-top: 6px; letter-spacing: 2px; }
+        .divider { width: 30px; height: 1px; background: linear-gradient(90deg, transparent, rgba(120, 170, 230, 0.3), transparent); margin: 0 auto 28px; }
+        .wishes { color: rgba(210, 225, 245, 0.75); font-size: 14px; line-height: 2.4; letter-spacing: 2px; font-weight: 300; }
+        .highlight-name { color: rgba(255, 195, 220, 0.9); font-weight: 400; text-shadow: 0 0 14px rgba(255, 160, 200, 0.5); }
+
+        /* ── 4. 吹蜡烛互动场景 ── */
+        #candleScene {
+            position: fixed; inset: 0; z-index: 30;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            opacity: 0; 
+            /* 极速淡入淡出：0.5秒 */
+            transition: opacity 0.5s ease;
+        }
+        #candleScene.visible { opacity: 1; }
+        .scene-title { color: rgba(220, 235, 255, 0.7); font-size: 15px; letter-spacing: 5px; font-weight: 300; margin-bottom: 48px; text-shadow: 0 0 20px rgba(100, 180, 255, 0.3); }
+
+        /* 蛋糕和蜡烛细节 */
+        .cake-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+        .candle-group { position: relative; display: flex; gap: 28px; margin-bottom: 0; }
+        .candle { display: flex; flex-direction: column; align-items: center; position: relative; }
+        .flame-wrap { position: relative; width: 18px; height: 32px; margin-bottom: 3px; transition: opacity 0.4s; }
+        .flame-outer { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 14px; height: 28px; background: radial-gradient(ellipse at 50% 80%, #fff 0%, #ffe066 20%, #ff9900 55%, transparent 100%); border-radius: 50% 50% 35% 35%; animation: flicker 1.1s ease-in-out infinite alternate; filter: blur(0.5px); }
+        .flame-inner { position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); width: 7px; height: 14px; background: radial-gradient(ellipse at 50% 80%, #fff 0%, #fffbe0 60%, transparent 100%); border-radius: 50% 50% 35% 35%; animation: flicker 0.8s ease-in-out infinite alternate-reverse; }
+        .flame-glow { position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: radial-gradient(circle, rgba(255,180,0,0.35) 0%, transparent 70%); animation: glowPulse 1s ease-in-out infinite alternate; }
+        .candle.blown .flame-wrap { opacity: 0; }
+        
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scaleX(1) scaleY(1) skewX(0deg); }
+            30% { transform: translateX(-50%) scaleX(0.9) scaleY(1.05) skewX(2deg); }
+            70% { transform: translateX(-50%) scaleX(1.1) scaleY(0.95) skewX(-2deg); }
+            100% { transform: translateX(-50%) scaleX(0.95) scaleY(1.02) skewX(1deg); }
+        }
+        @keyframes glowPulse { from { opacity: 0.5; transform: translateX(-50%) scale(1); } to { opacity: 0.9; transform: translateX(-50%) scale(1.3); } }
+        
+        .candle-body { width: 14px; height: 52px; background: linear-gradient(to right, #f7cce0, #fff0f5, #f2a8c8); border-radius: 3px 3px 2px 2px; position: relative; }
+        .candle-body::after { content: ''; position: absolute; top: 3px; left: 50%; transform: translateX(-50%); width: 3px; height: 10px; background: #555; border-radius: 2px; }
+        .candle-drip { position: absolute; top: 14px; left: 1px; width: 5px; height: 10px; background: rgba(255,200,220,0.8); border-radius: 0 0 4px 4px; }
+        
+        .cake-body { width: 220px; display: flex; flex-direction: column; align-items: center; }
+        .cake-top { width: 190px; height: 28px; background: linear-gradient(to bottom, #f9e0f0, #f0b8d8); border-radius: 8px 8px 0 0; position: relative; overflow: hidden; }
+        .frosting { position: absolute; top: -8px; left: 0; right: 0; display: flex; justify-content: space-around; }
+        .frosting-dot { width: 16px; height: 16px; background: #fff; border-radius: 50% 50% 40% 40%; box-shadow: 0 0 6px rgba(255,180,220,0.8); }
+        .cake-mid { width: 210px; height: 38px; background: linear-gradient(to bottom, #ffe8a0, #f5c842); position: relative; overflow: hidden; }
+        .cake-bottom { width: 220px; height: 44px; background: linear-gradient(to bottom, #c8a0f0, #a06ed8); border-radius: 0 0 10px 10px; position: relative; overflow: hidden; }
+        .cake-plate { width: 250px; height: 12px; background: linear-gradient(to bottom, #e8e0ff, #d0c0f0); border-radius: 0 0 50% 50% / 0 0 100% 100%; margin-top: -2px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+
+        .blow-hint { margin-top: 40px; color: rgba(200, 220, 255, 0.6); font-size: 13px; letter-spacing: 4px; font-weight: 300; animation: hintFade 2s ease-in-out infinite; }
+        @keyframes hintFade { 0%,100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+        .blow-btn { margin-top: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(200,220,255,0.2); color: rgba(200,230,255,0.8); font-family: inherit; font-size: 13px; letter-spacing: 3px; padding: 10px 28px; border-radius: 30px; cursor: pointer; transition: all 0.3s; position: relative; z-index: 100; }
+        .blow-btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(200,220,255,0.45); color: #e6f5ff; }
+
+        /* 烟雾特效 */
+        .smoke { position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); width: 6px; height: 0; opacity: 0; pointer-events: none; }
+        .smoke.puffing { animation: smokeRise 1.8s ease-out forwards; }
+        @keyframes smokeRise {
+            0% { height: 0; opacity: 0.8; filter: blur(1px); transform: translateX(-50%) scaleX(1); }
+            50% { height: 40px; opacity: 0.5; filter: blur(3px); transform: translateX(-50%) scaleX(2); }
+            100% { height: 70px; opacity: 0; filter: blur(6px); transform: translateX(-60%) scaleX(3); }
+        }
+
+        /* ── 5. 最终生日祝语 ── */
+        #wishOverlay {
+            position: fixed; inset: 0; z-index: 40; display: none; flex-direction: column;
+            align-items: center; justify-content: center; opacity: 0;
+            /* 极速淡入：0.5秒 */
+            transition: opacity 0.5s ease;
+        }
+        #wishOverlay.visible { display: flex; opacity: 1; pointer-events: auto; }
+        .wish-card {
+            background: rgba(4, 8, 22, 0.55); backdrop-filter: blur(30px);
+            border: 1px solid rgba(140,190,255,0.15); border-radius: 20px;
+            padding: 44px 52px; text-align: center; box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+        }
+        .wish-card h1 { color: rgba(255, 220, 180, 0.95); font-size: 22px; letter-spacing: 6px; font-weight: 300; text-shadow: 0 0 30px rgba(255,180,80,0.6); margin-bottom: 20px; }
+        .wish-card p { color: rgba(210, 225, 245, 0.75); font-size: 15px; line-height: 2.4; letter-spacing: 2px; font-weight: 300; }
+        .wish-card .name { color: rgba(255,195,220,0.95); text-shadow: 0 0 12px rgba(255,150,200,0.5); font-weight: 400;}
+
+        /* ── 沙漏装饰 ── */
+        .hourglass-wrap {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        #hgCanvas {
+            filter: drop-shadow(0 0 12px rgba(120,190,255,0.45));
+        }
+        .hourglass-label {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(140, 180, 230, 0.55);
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="1.mp3" loop preload="auto"></audio>
+
+    <canvas id="cosmosCanvas"></canvas>
+    <canvas id="cinematicCanvas"></canvas>
+
+    <div id="start-screen">
+        <div class="start-icon"></div>
+        <div class="pulse-text">触 碰 星 空，迎 接 奇 迹</div>
+        <p class="sub-text">2026.09.05 COUNTDOWN</p>
+    </div>
+
+    <div id="main-content">
+        <div class="card" id="birthday-card">
+            <h1>✦ &nbsp; 距离 20 岁还有 &nbsp; ✦</h1>
+            <div class="countdown-container">
+                <div class="time-box"><span class="num" id="days">00</span><span class="label">Days</span></div>
+                <div class="time-box"><span class="num" id="hours">00</span><span class="label">Hours</span></div>
+                <div class="time-box"><span class="num" id="mins">00</span><span class="label">Mins</span></div>
+                <div class="time-box"><span class="num" id="secs">00</span><span class="label">Secs</span></div>
+            </div>
+            <div class="divider"></div>
+            <div class="wishes">
+                亲爱的 <span class="highlight-name">我自己</span>：<br><br>
+                在这片专属的星空下，<br>
+                愿岁月如流星般璀璨生辉。<br>
+            </div>
+            <!-- 沙漏装饰：canvas 版，沙量随倒计时动态变化 -->
+            <div class="hourglass-wrap">
+                <canvas id="hgCanvas" width="72" height="96"></canvas>
+                <div class="hourglass-label">时 光 流 转</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="candleScene">
+        <div class="scene-title">✦ &nbsp; 许下心愿 &nbsp; ✦</div>
+        <div class="cake-wrap">
+            <div class="candle-group" id="candleGroup">
+                <div class="candle" id="c0">
+                    <div class="flame-wrap"><div class="flame-glow"></div><div class="flame-outer"></div><div class="flame-inner"></div><div class="smoke"></div></div>
+                    <div class="candle-body"><div class="candle-drip"></div></div>
+                </div>
+                <div class="candle" id="c1">
+                    <div class="flame-wrap"><div class="flame-glow"></div><div class="flame-outer"></div><div class="flame-inner"></div><div class="smoke"></div></div>
+                    <div class="candle-body" style="height:62px;background:linear-gradient(to right,#b8e0ff,#e8f4ff,#90ccf0)"><div class="candle-drip" style="left:auto;right:1px;background:rgba(160,210,255,0.8)"></div></div>
+                </div>
+                <div class="candle" id="c2">
+                    <div class="flame-wrap"><div class="flame-glow"></div><div class="flame-outer"></div><div class="flame-inner"></div><div class="smoke"></div></div>
+                    <div class="candle-body" style="background:linear-gradient(to right,#c8f0a0,#f0ffe0,#a8e070)"></div>
+                </div>
+            </div>
+            <div class="cake-body">
+                <div class="cake-top">
+                    <div class="frosting"><div class="frosting-dot"></div><div class="frosting-dot"></div><div class="frosting-dot"></div><div class="frosting-dot"></div><div class="frosting-dot"></div><div class="frosting-dot"></div><div class="frosting-dot"></div></div>
+                </div>
+                <div class="cake-mid"></div><div class="cake-bottom"></div><div class="cake-plate"></div>
+            </div>
+        </div>
+        <div class="blow-hint">— 点击按钮或屏幕吹灭蜡烛 —</div>
+        <button class="blow-btn" id="blowBtn">🕯 吹！</button>
+    </div>
+
+    <div id="wishOverlay">
+        <div class="wish-card">
+            <h1>🎂 &nbsp; 20岁生日快乐 &nbsp; 🎂</h1>
+            <p>亲爱的 <span class="name">我自己</span>，<br><br>
+            在这片专属的星空下，<br>
+            愿二十岁是你最闪耀的序章。<br>
+            愿眼中总有星辰大海，手中总有繁花似锦！<br>
+            岁岁常欢愉，万事皆胜意！</p>
+        </div>
+    </div>
+    <script>
+    let targetDate = new Date(2026, 8, 5, 0, 0, 0).getTime(); 
+    (function initCosmos() {
+        const canvas = document.getElementById('cosmosCanvas');
+        const ctx = canvas.getContext('2d');
+        let W, H;
+
+        function resize() { 
+            W = canvas.width = window.innerWidth; 
+            H = canvas.height = window.innerHeight; 
+            drawCosmos(); 
+        }
+        window.addEventListener('resize', resize);
+
+        function drawCosmos() {
+            ctx.clearRect(0, 0, W, H);
+            
+            // 渐变深空背景
+            const bg = ctx.createLinearGradient(0, 0, W * 0.4, H);
+            bg.addColorStop(0, '#01020d'); 
+            bg.addColorStop(0.45, '#020612'); 
+            bg.addColorStop(1, '#030818');
+            ctx.fillStyle = bg; 
+            ctx.fillRect(0, 0, W, H);
+            
+            // 银河光带
+            ctx.save(); 
+            ctx.translate(W * 0.5, H * 0.5); 
+            ctx.rotate(-0.35);
+            const mw = ctx.createLinearGradient(-W, 0, W, 0);
+            mw.addColorStop(0, 'rgba(0,0,0,0)'); 
+            mw.addColorStop(0.3, 'rgba(30,45,80,0.06)');
+            mw.addColorStop(0.5, 'rgba(60,90,140,0.10)'); 
+            mw.addColorStop(0.7, 'rgba(30,45,80,0.06)');
+            mw.addColorStop(1, 'rgba(0,0,0,0)'); 
+            ctx.fillStyle = mw; 
+            ctx.fillRect(-W, -H * 0.55, W * 2, H * 1.1); 
+            ctx.restore();
+
+            // 绘制星云
+            const nebulae = [
+                { x: W * 0.15, y: H * 0.25, rx: W * 0.38, ry: H * 0.28, r: 20, g: 40, b: 120, a: 0.07 },
+                { x: W * 0.80, y: H * 0.60, rx: W * 0.32, ry: H * 0.30, r: 60, g: 20, b: 110, a: 0.06 },
+                { x: W * 0.50, y: H * 0.80, rx: W * 0.45, ry: H * 0.22, r: 10, g: 30, b: 100, a: 0.05 },
+                { x: W * 0.75, y: H * 0.15, rx: W * 0.20, ry: H * 0.18, r: 50, g: 30, b: 130, a: 0.05 }
+            ];
+            nebulae.forEach(n => {
+                ctx.save(); 
+                ctx.scale(1, n.ry / n.rx);
+                const grad = ctx.createRadialGradient(n.x, n.y * (n.rx / n.ry), 0, n.x, n.y * (n.rx / n.ry), n.rx);
+                grad.addColorStop(0, `rgba(${n.r},${n.g},${n.b},${n.a})`); 
+                grad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.globalCompositeOperation = 'screen'; 
+                ctx.fillStyle = grad;
+                ctx.beginPath(); 
+                ctx.arc(n.x, n.y * (n.rx / n.ry), n.rx, 0, Math.PI * 2); 
+                ctx.fill(); 
+                ctx.restore();
+            });
+            ctx.globalCompositeOperation = 'source-over';
+
+            // 绘制繁星
+            let seed = 42;
+            const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+            for (let i = 0; i < 1400; i++) {
+                const x = random() * W; 
+                const y = random() * H; 
+                const r = random() * 0.85 + 0.1;
+                const bright = random() * 0.55 + 0.2; 
+                const hue = random();
+                let cr, cg, cb;
+                
+                if (hue < 0.6) { cr = 200; cg = 220; cb = 255; } 
+                else if (hue < 0.8) { cr = 255; cg = 240; cb = 200; } 
+                else { cr = 180; cg = 200; cb = 255; }
+                
+                ctx.save(); 
+                ctx.globalAlpha = bright;
+                
+                const glow = ctx.createRadialGradient(x, y, 0, x, y, r * 5);
+                glow.addColorStop(0, `rgba(${cr},${cg},${cb},0.6)`); 
+                glow.addColorStop(1, 'rgba(0,0,0,0)');
+                
+                ctx.fillStyle = glow; 
+                ctx.beginPath(); 
+                ctx.arc(x, y, r * 5, 0, Math.PI * 2); 
+                ctx.fill();
+                
+                ctx.fillStyle = `rgba(${cr},${cg},${cb},1)`; 
+                ctx.beginPath(); 
+                ctx.arc(x, y, r, 0, Math.PI * 2); 
+                ctx.fill(); 
+                ctx.restore();
+            }
+        }
+        resize();
+    })();
+
+    // ==========================================
+    //  2. 动态流星与光晕层 (明文版)
+    // ==========================================
+    function initCinematicSky() {
+        const canvas = document.getElementById('cinematicCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resize() { 
+            width = canvas.width = window.innerWidth; 
+            height = canvas.height = window.innerHeight; 
+        }
+        window.addEventListener('resize', resize); 
+        resize();
+
+        // 创建发光粒子纹理
+        function createGlowSprite(r, g, b, radius) {
+            const sp = document.createElement('canvas'); 
+            sp.width = sp.height = radius * 2;
+            const sc = sp.getContext('2d'); 
+            const grad = sc.createRadialGradient(radius, radius, 0, radius, radius, radius);
+            grad.addColorStop(0, '#FFF'); 
+            grad.addColorStop(0.2, `rgba(${r},${g},${b},0.8)`); 
+            grad.addColorStop(1, 'rgba(0,0,0,0)');
+            sc.fillStyle = grad; 
+            sc.fillRect(0, 0, radius * 2, radius * 2); 
+            return sp;
+        }
+
+        const spriteW = createGlowSprite(200, 220, 255, 8); 
+        const spriteB = createGlowSprite(100, 150, 255, 10);
+        const sprites = [spriteW, spriteW, spriteB, createGlowSprite(255, 220, 150, 9)];
+
+        const stars = Array.from({ length: 350 }, () => ({
+            x: Math.random() * width, 
+            y: Math.random() * height, 
+            sprite: sprites[Math.floor(Math.random() * sprites.length)],
+            scale: Math.random() * 0.35 + 0.08, 
+            opacity: Math.random(), 
+            speed: Math.random() * 0.012 + 0.004, 
+            layer: Math.random() * 0.3 + 0.05
+        }));
+
+        const particles = [];
+        class Particle {
+            constructor(x, y, type) {
+                this.x = x; 
+                this.y = y; 
+                this.vx = -(Math.random() * 3 + 1); 
+                this.vy = Math.random() * 3 + 1;
+                this.life = 1; 
+                this.decay = Math.random() * 0.018 + 0.012; 
+                this.size = Math.random() * 1.5 + 0.5;
+                this.color = type === 'cyan' ? '100,230,255' : '200,150,255';
+            }
+            update() { 
+                this.x += this.vx; 
+                this.y += this.vy; 
+                this.life -= this.decay; 
+            }
+            draw(c) { 
+                c.fillStyle = `rgba(${this.color},${this.life * 0.7})`; 
+                c.beginPath(); 
+                c.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                c.fill(); 
+            }
+        }
+
+        class Meteor {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * width * 1.5; 
+                this.y = Math.random() * -height;
+                this.vx = -(Math.random() * 10 + 8); 
+                this.vy = Math.random() * 8 + 6;
+                this.length = Math.random() * 400 + 150; 
+                this.thickness = Math.random() * 1.5 + 0.5;
+                this.type = Math.random() > 0.5 ? 'cyan' : 'pink';
+            }
+            update() {
+                this.x += this.vx; 
+                this.y += this.vy;
+                if (Math.random() > 0.6) particles.push(new Particle(this.x, this.y, this.type));
+                if (this.x < -this.length || this.y > height + this.length) this.reset();
+            }
+            draw(c) {
+                const tx = this.x - (this.vx / Math.abs(this.vx)) * this.length * (Math.abs(this.vx) / (Math.abs(this.vx) + this.vy));
+                const ty = this.y - this.length * (this.vy / (Math.abs(this.vx) + this.vy));
+                const g = c.createLinearGradient(this.x, this.y, tx, ty);
+                if (this.type === 'cyan') {
+                    g.addColorStop(0, 'rgba(255,255,255,0.9)'); 
+                    g.addColorStop(0.1, 'rgba(120,230,255,0.7)'); 
+                    g.addColorStop(1, 'rgba(0,0,60,0)');
+                } else {
+                    g.addColorStop(0, 'rgba(255,255,255,0.9)'); 
+                    g.addColorStop(0.1, 'rgba(220,160,255,0.7)'); 
+                    g.addColorStop(1, 'rgba(30,0,40,0)');
+                }
+                c.beginPath(); 
+                c.moveTo(this.x, this.y); 
+                c.lineTo(tx, ty); 
+                c.lineWidth = this.thickness; 
+                c.strokeStyle = g; 
+                c.lineCap = 'round'; 
+                c.stroke();
+            }
+        }
+
+        const meteors = Array.from({ length: 12 }, () => new Meteor());
+        let time = 0;
+
+        function animate() {
+            time += 0.004; 
+            ctx.clearRect(0, 0, width, height); 
+            ctx.globalCompositeOperation = 'screen';
+            
+            stars.forEach(star => {
+                star.opacity += star.speed; 
+                if (star.opacity > 1 || star.opacity < 0.05) star.speed = -star.speed;
+                let cx = star.x - time * 60 * star.layer; 
+                if (cx < 0) cx = width + (cx % width);
+                ctx.globalAlpha = Math.abs(star.opacity) * 0.8; 
+                const sz = star.sprite.width * star.scale;
+                ctx.drawImage(star.sprite, cx - sz/2, star.y - sz/2, sz, sz);
+            });
+            
+            ctx.globalAlpha = 1;
+            for (let i = particles.length - 1; i >= 0; i--) { 
+                particles[i].update(); 
+                particles[i].draw(ctx); 
+                if (particles[i].life <= 0) particles.splice(i, 1); 
+            }
+            meteors.forEach(m => { m.update(); m.draw(ctx); }); 
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
+    // ==========================================
+    //  3. 倒计时与转场控制逻辑
+    // ==========================================
+    const startScreen = document.getElementById('start-screen');
+    const mainContent = document.getElementById('main-content');
+    const birthdayCard = document.getElementById('birthday-card');
+    const bgMusic = document.getElementById('bgMusic');
+    let countdownTimer;
+
+    // ── 沙漏 Canvas 绘制 ──
+    // 起始计时基准：从1年前开始（可根据实际需要调整）
+    const hgStartDate = new Date(2025, 8, 5, 0, 0, 0).getTime(); // 2025-09-05
+    const hgTotalMs = targetDate - hgStartDate; // 总时长
+
+    function drawHourglass(ratio) {
+        // ratio: 0=沙全在下(快到了), 1=沙全在上(还早)
+        const canvas = document.getElementById('hgCanvas');
+        if (!canvas) return;
+        const c = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        c.clearRect(0, 0, W, H);
+
+        const cx = W / 2;
+        const topY = 4, botY = H - 4, midY = H / 2;
+        const topHalfW = W / 2 - 5; // 上口半宽
+        const neckW = 2.5;           // 颈部半宽
+
+        // 沙漏轮廓路径（上三角+下三角）
+        function hgPath() {
+            c.beginPath();
+            c.moveTo(cx - topHalfW, topY);
+            c.lineTo(cx + topHalfW, topY);
+            c.lineTo(cx + neckW, midY);
+            c.lineTo(cx + topHalfW, botY);
+            c.lineTo(cx - topHalfW, botY);
+            c.lineTo(cx - neckW, midY);
+            c.closePath();
+        }
+
+        // 绘制上半沙（梯形，底边在 midY，高度随 ratio 缩减）
+        function drawSandTop(r) {
+            // r=1 满沙，r=0 无沙
+            if (r <= 0) return;
+            const sandH = (midY - topY - 2) * r; // 沙的高度
+            const sandTop = midY - 2 - sandH;     // 沙面 y
+
+            // 沙漏上半的左右边界在 sandTop 处的 x
+            const slope = (topHalfW - neckW) / (midY - topY);
+            const halfWAtSandTop = neckW + slope * (midY - 2 - sandTop);
+
+            c.save();
+            c.beginPath();
+            // clip 到上半三角
+            c.moveTo(cx - topHalfW, topY);
+            c.lineTo(cx + topHalfW, topY);
+            c.lineTo(cx + neckW, midY);
+            c.lineTo(cx - neckW, midY);
+            c.closePath();
+            c.clip();
+
+            // 沙面梯形
+            c.beginPath();
+            c.moveTo(cx - halfWAtSandTop, sandTop);
+            c.lineTo(cx + halfWAtSandTop, sandTop);
+            c.lineTo(cx + neckW, midY - 2);
+            c.lineTo(cx - neckW, midY - 2);
+            c.closePath();
+
+            const grad = c.createLinearGradient(cx, sandTop, cx, midY);
+            grad.addColorStop(0, 'rgba(160,215,255,0.55)');
+            grad.addColorStop(1, 'rgba(100,170,255,0.75)');
+            c.fillStyle = grad;
+            c.fill();
+
+            // 沙面高光线
+            c.beginPath();
+            c.moveTo(cx - halfWAtSandTop + 2, sandTop + 1);
+            c.lineTo(cx + halfWAtSandTop - 2, sandTop + 1);
+            c.strokeStyle = 'rgba(220,240,255,0.4)';
+            c.lineWidth = 1;
+            c.stroke();
+            c.restore();
+        }
+
+        // 绘制下半沙（梯形，顶边在 midY，高度随 (1-ratio) 增加）
+        function drawSandBot(r) {
+            const fillR = 1 - r; // 下面装了多少
+            if (fillR <= 0) return;
+            const sandH = (botY - midY - 2) * fillR;
+            const sandBot = botY - 2;
+            const sandTop = sandBot - sandH;
+
+            const slope = (topHalfW - neckW) / (botY - midY);
+            const halfWAtSandBot = topHalfW - slope * (botY - 2 - sandBot); // ≈ topHalfW
+            const halfWAtSandTop = neckW + slope * (sandTop - midY);
+
+            c.save();
+            c.beginPath();
+            c.moveTo(cx + neckW, midY);
+            c.lineTo(cx + topHalfW, botY);
+            c.lineTo(cx - topHalfW, botY);
+            c.lineTo(cx - neckW, midY);
+            c.closePath();
+            c.clip();
+
+            c.beginPath();
+            c.moveTo(cx - halfWAtSandTop, sandTop);
+            c.lineTo(cx + halfWAtSandTop, sandTop);
+            c.lineTo(cx + halfWAtSandBot, sandBot);
+            c.lineTo(cx - halfWAtSandBot, sandBot);
+            c.closePath();
+
+            const grad = c.createLinearGradient(cx, sandTop, cx, sandBot);
+            grad.addColorStop(0, 'rgba(100,170,255,0.65)');
+            grad.addColorStop(1, 'rgba(140,200,255,0.5)');
+            c.fillStyle = grad;
+            c.fill();
+            c.restore();
+        }
+
+        // 绘制沙流（只有 ratio > 0 时才有流）
+        function drawStream(r) {
+            if (r <= 0.01) return;
+            const streamAlpha = Math.min(r * 3, 0.9);
+            const grad = c.createLinearGradient(cx, midY, cx, midY + 6);
+            grad.addColorStop(0, `rgba(200,235,255,${streamAlpha})`);
+            grad.addColorStop(1, `rgba(200,235,255,0)`);
+            c.strokeStyle = grad;
+            c.lineWidth = 1.5;
+            c.lineCap = 'round';
+            c.beginPath();
+            c.moveTo(cx, midY - 1);
+            c.lineTo(cx, midY + 7);
+            c.stroke();
+        }
+
+        // 1. 绘制沙
+        drawSandTop(ratio);
+        drawSandBot(ratio);
+        drawStream(ratio);
+
+        // 2. 绘制外框轮廓（叠在沙上面）
+        hgPath();
+        c.strokeStyle = 'rgba(150,200,255,0.45)';
+        c.lineWidth = 1.5;
+        c.lineJoin = 'round';
+        c.stroke();
+
+        // 3. 顶底横梁
+        c.strokeStyle = 'rgba(190,220,255,0.65)';
+        c.lineWidth = 2.5;
+        c.lineCap = 'round';
+        c.beginPath(); c.moveTo(cx - topHalfW - 1, topY); c.lineTo(cx + topHalfW + 1, topY); c.stroke();
+        c.beginPath(); c.moveTo(cx - topHalfW - 1, botY); c.lineTo(cx + topHalfW + 1, botY); c.stroke();
+    }
+
+    function updateCountdown() {
+        const gap = targetDate - Date.now();
+        if (gap <= 0) {
+            ['days','hours','mins','secs'].forEach(id => document.getElementById(id).innerText = '00');
+            drawHourglass(0);
+            clearInterval(countdownTimer); 
+            triggerTransition(); // 倒计时归零，触发无缝衔接
+            return;
+        }
+        const d = Math.floor(gap / 86400000);
+        const h = Math.floor((gap % 86400000) / 3600000);
+        const m = Math.floor((gap % 3600000) / 60000);
+        const s = Math.floor((gap % 60000) / 1000);
+        document.getElementById('days').innerText = d;
+        document.getElementById('hours').innerText = String(h).padStart(2,'0');
+        document.getElementById('mins').innerText = String(m).padStart(2,'0');
+        document.getElementById('secs').innerText = String(s).padStart(2,'0');
+        // 更新沙漏：ratio = 剩余/总时长，限制在 [0,1]
+        const ratio = Math.max(0, Math.min(1, gap / hgTotalMs));
+        drawHourglass(ratio);
+    }
+
+    // 点击触碰星空
+    startScreen.addEventListener('click', () => {
+        bgMusic.play().catch(() => {});
+        startScreen.style.opacity = '0';
+        setTimeout(() => {
+            startScreen.style.display = 'none';
+            mainContent.style.display = 'flex';
+            setTimeout(() => birthdayCard.classList.add('show'), 10);
+            initCinematicSky(); // 启动动态星空
+            countdownTimer = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        }, 400); 
+    });
+
+    // 转场动画：倒计时 -> 吹蜡烛 (1秒完成)
+    function triggerTransition() {
+        // 第一步：倒计时卡片淡出 (0.5秒)
+        birthdayCard.style.opacity = '0';
+        birthdayCard.style.transform = 'translateY(-20px)';
+        
+        setTimeout(() => {
+            mainContent.style.display = 'none';
+            // 第二步：蛋糕场景淡入 (0.5秒)
+            const candleScene = document.getElementById('candleScene');
+            candleScene.style.display = 'flex';
+            setTimeout(() => {
+                candleScene.classList.add('visible');
+            }, 50);
+        }, 500); 
+    }
+
+    // ==========================================
+    //  4. 吹蜡烛与最终祝语逻辑
+    // ==========================================
+    const candles = [
+        document.getElementById('c0'), 
+        document.getElementById('c1'), 
+        document.getElementById('c2')
+    ];
+    let blownCount = 0;
+    let isTransitioning = false; 
+
+    // 吹灭单根蜡烛
+    function blowCandle(idx) {
+        if (!candles[idx] || candles[idx].classList.contains('blown')) return;
+        
+        candles[idx].classList.add('blown');
+        const smoke = candles[idx].querySelector('.smoke');
+        smoke.classList.add('puffing');
+        blownCount++;
+        
+        // 当3根蜡烛全部熄灭
+        if (blownCount >= candles.length && !isTransitioning) {
+            isTransitioning = true;
+            setTimeout(showFinalWish, 600); // 等待烟雾升起后开始转场
+        }
+    }
+
+    // 一键吹灭所有
+    function blowAll() {
+        if (isTransitioning) return;
+        const btn = document.getElementById('blowBtn');
+        btn.disabled = true;
+        btn.style.opacity = '0.4';
+        
+        // 依次吹灭，带有微小延迟更真实
+        candles.forEach((_, i) => setTimeout(() => blowCandle(i), i * 180));
+    }
+
+    // 绑定点击事件
+    document.getElementById('blowBtn').addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        blowAll();
+    });
+    document.getElementById('candleScene').addEventListener('click', (e) => {
+        if (e.target.id !== 'blowBtn' && !isTransitioning) blowAll();
+    });
+
+    // 转场动画：吹蜡烛 -> 最终祝语 (1秒完成)
+    function showFinalWish() {
+        const scene = document.getElementById('candleScene');
+        // 第一步：蛋糕场景淡出 (0.5秒)
+        scene.style.opacity = '0';
+        
+        setTimeout(() => { 
+            scene.style.display = 'none'; 
+            // 第二步：最终祝语淡入 (0.5秒)
+            const wish = document.getElementById('wishOverlay');
+            wish.classList.add('visible');
+        }, 500);
+    }
+    </script>
+</body>
+</html>
