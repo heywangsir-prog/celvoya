@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🎂 我的专属生日礼物 🎂</title>
+    <title>🎂 臭傻子的专属生日礼物 🎂</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght=300;400&display=swap');
 
         /* 基础重置 */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -171,12 +171,12 @@
     <div id="start-screen">
         <div class="start-icon"></div>
         <div class="pulse-text">触 碰 星 空，迎 接 奇 迹</div>
-        <p class="sub-text">2026.09.05 COUNTDOWN</p>
+        <p class="sub-text">2026.07.30 COUNTDOWN</p>
     </div>
 
     <div id="main-content">
         <div class="card" id="birthday-card">
-            <h1>✦ &nbsp; 距离 20 岁还有 &nbsp; ✦</h1>
+            <h1>✦ &nbsp; 距离 18 岁还有 &nbsp; ✦</h1>
             <div class="countdown-container">
                 <div class="time-box"><span class="num" id="days">00</span><span class="label">Days</span></div>
                 <div class="time-box"><span class="num" id="hours">00</span><span class="label">Hours</span></div>
@@ -185,7 +185,7 @@
             </div>
             <div class="divider"></div>
             <div class="wishes">
-                亲爱的 <span class="highlight-name">我自己</span>：<br><br>
+                亲爱的 <span class="highlight-name">乐子</span>：<br><br>
                 在这片专属的星空下，<br>
                 愿岁月如流星般璀璨生辉。<br>
             </div>
@@ -227,16 +227,17 @@
 
     <div id="wishOverlay">
         <div class="wish-card">
-            <h1>🎂 &nbsp; 20岁生日快乐 &nbsp; 🎂</h1>
+            <h1>🎂 &nbsp; 18岁生日快乐 &nbsp; 🎂</h1>
             <p>亲爱的 <span class="name">我自己</span>，<br><br>
             在这片专属的星空下，<br>
-            愿二十岁是你最闪耀的序章。<br>
+            愿十八岁是你最闪耀的序章。<br>
             愿眼中总有星辰大海，手中总有繁花似锦！<br>
             岁岁常欢愉，万事皆胜意！</p>
         </div>
     </div>
     <script>
-    let targetDate = new Date(2026, 8, 5, 0, 0, 0).getTime(); 
+    // 目标日期修改为 2026 年 7 月 30 日
+    let targetDate = new Date(2026, 6, 30, 0, 0, 0).getTime(); 
     (function initCosmos() {
         const canvas = document.getElementById('cosmosCanvas');
         const ctx = canvas.getContext('2d');
@@ -482,11 +483,10 @@
 
     // ── 沙漏 Canvas 绘制 ──
     // 起始计时基准：从1年前开始（可根据实际需要调整）
-    const hgStartDate = new Date(2025, 8, 5, 0, 0, 0).getTime(); // 2025-09-05
+    const hgStartDate = new Date(2025, 6, 30, 0, 0, 0).getTime(); // 2025-07-30
     const hgTotalMs = targetDate - hgStartDate; // 总时长
 
     function drawHourglass(ratio) {
-        // ratio: 0=沙全在下(快到了), 1=沙全在上(还早)
         const canvas = document.getElementById('hgCanvas');
         if (!canvas) return;
         const c = canvas.getContext('2d');
@@ -495,10 +495,9 @@
 
         const cx = W / 2;
         const topY = 4, botY = H - 4, midY = H / 2;
-        const topHalfW = W / 2 - 5; // 上口半宽
-        const neckW = 2.5;           // 颈部半宽
+        const topHalfW = W / 2 - 5; 
+        const neckW = 2.5;           
 
-        // 沙漏轮廓路径（上三角+下三角）
         function hgPath() {
             c.beginPath();
             c.moveTo(cx - topHalfW, topY);
@@ -510,20 +509,16 @@
             c.closePath();
         }
 
-        // 绘制上半沙（梯形，底边在 midY，高度随 ratio 缩减）
         function drawSandTop(r) {
-            // r=1 满沙，r=0 无沙
             if (r <= 0) return;
-            const sandH = (midY - topY - 2) * r; // 沙的高度
-            const sandTop = midY - 2 - sandH;     // 沙面 y
+            const sandH = (midY - topY - 2) * r; 
+            const sandTop = midY - 2 - sandH;     
 
-            // 沙漏上半的左右边界在 sandTop 处的 x
             const slope = (topHalfW - neckW) / (midY - topY);
             const halfWAtSandTop = neckW + slope * (midY - 2 - sandTop);
 
             c.save();
             c.beginPath();
-            // clip 到上半三角
             c.moveTo(cx - topHalfW, topY);
             c.lineTo(cx + topHalfW, topY);
             c.lineTo(cx + neckW, midY);
@@ -531,7 +526,6 @@
             c.closePath();
             c.clip();
 
-            // 沙面梯形
             c.beginPath();
             c.moveTo(cx - halfWAtSandTop, sandTop);
             c.lineTo(cx + halfWAtSandTop, sandTop);
@@ -545,7 +539,6 @@
             c.fillStyle = grad;
             c.fill();
 
-            // 沙面高光线
             c.beginPath();
             c.moveTo(cx - halfWAtSandTop + 2, sandTop + 1);
             c.lineTo(cx + halfWAtSandTop - 2, sandTop + 1);
@@ -555,16 +548,15 @@
             c.restore();
         }
 
-        // 绘制下半沙（梯形，顶边在 midY，高度随 (1-ratio) 增加）
         function drawSandBot(r) {
-            const fillR = 1 - r; // 下面装了多少
+            const fillR = 1 - r; 
             if (fillR <= 0) return;
             const sandH = (botY - midY - 2) * fillR;
             const sandBot = botY - 2;
             const sandTop = sandBot - sandH;
 
             const slope = (topHalfW - neckW) / (botY - midY);
-            const halfWAtSandBot = topHalfW - slope * (botY - 2 - sandBot); // ≈ topHalfW
+            const halfWAtSandBot = topHalfW - slope * (botY - 2 - sandBot); 
             const halfWAtSandTop = neckW + slope * (sandTop - midY);
 
             c.save();
@@ -591,7 +583,6 @@
             c.restore();
         }
 
-        // 绘制沙流（只有 ratio > 0 时才有流）
         function drawStream(r) {
             if (r <= 0.01) return;
             const streamAlpha = Math.min(r * 3, 0.9);
@@ -607,19 +598,16 @@
             c.stroke();
         }
 
-        // 1. 绘制沙
         drawSandTop(ratio);
         drawSandBot(ratio);
         drawStream(ratio);
 
-        // 2. 绘制外框轮廓（叠在沙上面）
         hgPath();
         c.strokeStyle = 'rgba(150,200,255,0.45)';
         c.lineWidth = 1.5;
         c.lineJoin = 'round';
         c.stroke();
 
-        // 3. 顶底横梁
         c.strokeStyle = 'rgba(190,220,255,0.65)';
         c.lineWidth = 2.5;
         c.lineCap = 'round';
@@ -633,7 +621,7 @@
             ['days','hours','mins','secs'].forEach(id => document.getElementById(id).innerText = '00');
             drawHourglass(0);
             clearInterval(countdownTimer); 
-            triggerTransition(); // 倒计时归零，触发无缝衔接
+            triggerTransition(); 
             return;
         }
         const d = Math.floor(gap / 86400000);
@@ -644,12 +632,11 @@
         document.getElementById('hours').innerText = String(h).padStart(2,'0');
         document.getElementById('mins').innerText = String(m).padStart(2,'0');
         document.getElementById('secs').innerText = String(s).padStart(2,'0');
-        // 更新沙漏：ratio = 剩余/总时长，限制在 [0,1]
+        
         const ratio = Math.max(0, Math.min(1, gap / hgTotalMs));
         drawHourglass(ratio);
     }
 
-    // 点击触碰星空
     startScreen.addEventListener('click', () => {
         bgMusic.play().catch(() => {});
         startScreen.style.opacity = '0';
@@ -657,21 +644,18 @@
             startScreen.style.display = 'none';
             mainContent.style.display = 'flex';
             setTimeout(() => birthdayCard.classList.add('show'), 10);
-            initCinematicSky(); // 启动动态星空
+            initCinematicSky(); 
             countdownTimer = setInterval(updateCountdown, 1000);
             updateCountdown();
         }, 400); 
     });
 
-    // 转场动画：倒计时 -> 吹蜡烛 (1秒完成)
     function triggerTransition() {
-        // 第一步：倒计时卡片淡出 (0.5秒)
         birthdayCard.style.opacity = '0';
         birthdayCard.style.transform = 'translateY(-20px)';
         
         setTimeout(() => {
             mainContent.style.display = 'none';
-            // 第二步：蛋糕场景淡入 (0.5秒)
             const candleScene = document.getElementById('candleScene');
             candleScene.style.display = 'flex';
             setTimeout(() => {
@@ -691,7 +675,6 @@
     let blownCount = 0;
     let isTransitioning = false; 
 
-    // 吹灭单根蜡烛
     function blowCandle(idx) {
         if (!candles[idx] || candles[idx].classList.contains('blown')) return;
         
@@ -700,25 +683,21 @@
         smoke.classList.add('puffing');
         blownCount++;
         
-        // 当3根蜡烛全部熄灭
         if (blownCount >= candles.length && !isTransitioning) {
             isTransitioning = true;
-            setTimeout(showFinalWish, 600); // 等待烟雾升起后开始转场
+            setTimeout(showFinalWish, 600); 
         }
     }
 
-    // 一键吹灭所有
     function blowAll() {
         if (isTransitioning) return;
         const btn = document.getElementById('blowBtn');
         btn.disabled = true;
         btn.style.opacity = '0.4';
         
-        // 依次吹灭，带有微小延迟更真实
         candles.forEach((_, i) => setTimeout(() => blowCandle(i), i * 180));
     }
 
-    // 绑定点击事件
     document.getElementById('blowBtn').addEventListener('click', (e) => {
         e.stopPropagation(); 
         blowAll();
@@ -727,15 +706,12 @@
         if (e.target.id !== 'blowBtn' && !isTransitioning) blowAll();
     });
 
-    // 转场动画：吹蜡烛 -> 最终祝语 (1秒完成)
     function showFinalWish() {
         const scene = document.getElementById('candleScene');
-        // 第一步：蛋糕场景淡出 (0.5秒)
         scene.style.opacity = '0';
         
         setTimeout(() => { 
             scene.style.display = 'none'; 
-            // 第二步：最终祝语淡入 (0.5秒)
             const wish = document.getElementById('wishOverlay');
             wish.classList.add('visible');
         }, 500);
