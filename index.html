@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>二十 · 启程</title>
+    <title>🎂 二十 · 启程</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
@@ -96,7 +96,7 @@
             color: rgba(255, 255, 255, 0.2);
         }
 
-        /* ─── 主卡片 ─── */
+        /* ─── 倒计时卡片 ─── */
         #main-content {
             position: relative;
             z-index: 10;
@@ -212,6 +212,10 @@
             letter-spacing: 0.3px;
             color: rgba(255, 255, 255, 0.45);
         }
+        .card-body p .highlight {
+            color: #f5f5f7;
+            font-weight: 500;
+        }
 
         .hourglass-wrap {
             margin-top: 22px;
@@ -231,7 +235,7 @@
             color: rgba(255, 255, 255, 0.12);
         }
 
-        /* ─── 吹蜡烛 ─── */
+        /* ─── 吹蜡烛场景 ─── */
         #candleScene {
             position: fixed;
             inset: 0;
@@ -619,16 +623,19 @@
 </head>
 <body>
 
+    <!-- ─── 音频元素 ─── -->
+    <audio id="bgMusic" src="1.mp3" loop preload="auto"></audio>
+
     <canvas id="bgCanvas"></canvas>
 
-    <!-- 首屏 -->
+    <!-- ─── 首屏 ─── -->
     <div id="start-screen">
         <div class="start-label">✦ 启 ✦</div>
         <div class="start-ring"></div>
         <div class="start-sub">2026.09.05</div>
     </div>
 
-    <!-- 倒计时 -->
+    <!-- ─── 倒计时 ─── -->
     <div id="main-content">
         <div class="card" id="birthday-card">
             <div class="card-head">
@@ -655,7 +662,7 @@
         </div>
     </div>
 
-    <!-- 吹蜡烛 -->
+    <!-- ─── 吹蜡烛场景 ─── -->
     <div id="candleScene">
         <div class="scene-title">✦ 许个愿吧 ✦</div>
         <div class="candle-group" id="candleGroup">
@@ -684,7 +691,7 @@
         </div>
     </div>
 
-    <!-- 最终祝语 -->
+    <!-- ─── 最终祝语 ─── -->
     <div id="wishOverlay">
         <div class="wish-card">
             <span class="emoji">🎂</span>
@@ -714,9 +721,9 @@
             resize();
 
             const glows = [
-                { x: 0, y: 0, r: 0, dx: 0.2, dy: 0.25, color: 'rgba(255,215,140,0.04)' },
-                { x: 0, y: 0, r: 0, dx: 0.7, dy: 0.6, color: 'rgba(200,180,255,0.03)' },
-                { x: 0, y: 0, r: 0, dx: 0.4, dy: 0.85, color: 'rgba(255,180,140,0.03)' }
+                { dx: 0.2, dy: 0.25, color: 'rgba(255,215,140,0.04)' },
+                { dx: 0.7, dy: 0.6, color: 'rgba(200,180,255,0.03)' },
+                { dx: 0.4, dy: 0.85, color: 'rgba(255,180,140,0.03)' }
             ];
 
             const dots = [];
@@ -925,14 +932,19 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 3. 转场
+        // 3. 转场控制（倒计时 → 吹蜡烛）
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const startScreen = document.getElementById('start-screen');
         const mainContent = document.getElementById('main-content');
         const birthdayCard = document.getElementById('birthday-card');
+        const bgMusic = document.getElementById('bgMusic');
         let isTransitioning = false;
 
+        // 首屏点击 → 播放音乐 + 显示倒计时
         startScreen.addEventListener('click', () => {
+            // 播放音乐（与之前版本一致）
+            bgMusic.play().catch(() => {});
+
             startScreen.classList.add('hidden');
             setTimeout(() => {
                 startScreen.style.display = 'none';
@@ -943,6 +955,7 @@
             }, 800);
         });
 
+        // 倒计时归零 → 自动转吹蜡烛
         function triggerTransition() {
             if (isTransitioning) return;
             isTransitioning = true;
@@ -956,7 +969,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 4. 吹蜡烛
+        // 4. 吹蜡烛 → 最终祝语
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const candles = [
             document.getElementById('c0'),
@@ -1004,7 +1017,7 @@
         }
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 5. 自适应
+        // 5. 自适应 & 键盘支持（空格吹灭）
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         window.addEventListener('resize', () => {
             const gap = targetDate - Date.now();
@@ -1021,6 +1034,16 @@
                 drawHourglass(ratio);
             }
         }, 100);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Space') {
+                e.preventDefault();
+                const scene = document.getElementById('candleScene');
+                if (scene.classList.contains('visible') && !candleDone) {
+                    blowAll();
+                }
+            }
+        });
     </script>
 
 </body>
