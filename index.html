@@ -23,6 +23,28 @@
             color: #f5f5f7;
         }
 
+        /* ─── 漂浮文字样式（默认隐藏，进入主界面后淡入） ─── */
+        #floating-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            pointer-events: none;
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            color: #ffd78c;
+            white-space: nowrap;
+            user-select: none;
+            will-change: transform;
+            text-shadow: 0 0 16px rgba(255, 215, 140, 0.35);
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        #floating-text.visible {
+            opacity: 1;
+        }
+
         #bgCanvas {
             position: fixed;
             inset: 0;
@@ -544,6 +566,9 @@
         }
 
         @media (max-width: 480px) {
+            #floating-text {
+                font-size: 16px;
+            }
             .card {
                 padding: 32px 20px 28px;
             }
@@ -622,6 +647,9 @@
     </style>
 </head>
 <body>
+
+    <!-- ─── 漂浮文字元素（默认隐藏） ─── -->
+    <div id="floating-text">我知道你看到了</div>
 
     <!-- ─── 音频元素 ─── -->
     <audio id="bgMusic" src="1.mp3" loop preload="auto"></audio>
@@ -708,6 +736,50 @@
 
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        // 0. 漂浮文字碰撞反弹逻辑 (速度 0.2)
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        (function initFloatingText() {
+            const floatEl = document.getElementById('floating-text');
+            if (!floatEl) return;
+
+            let x = 30, y = 30;       // 初始位置
+            let vx = 0.2, vy = 0.15;   // 慢速移动 (0.2 级别)
+
+            function animate() {
+                x += vx;
+                y += vy;
+
+                const w = floatEl.offsetWidth;
+                const h = floatEl.offsetHeight;
+                const winW = window.innerWidth;
+                const winH = window.innerHeight;
+
+                // 左右边缘碰撞处理
+                if (x + w >= winW) {
+                    x = winW - w;
+                    vx = -vx;
+                } else if (x <= 0) {
+                    x = 0;
+                    vx = -vx;
+                }
+
+                // 上下边缘碰撞处理
+                if (y + h >= winH) {
+                    y = winH - h;
+                    vy = -vy;
+                } else if (y <= 0) {
+                    y = 0;
+                    vy = -vy;
+                }
+
+                floatEl.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                requestAnimationFrame(animate);
+            }
+
+            requestAnimationFrame(animate);
+        })();
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         // 1. 深色柔光背景
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         (function initBg() {
@@ -715,8 +787,10 @@
             const ctx = canvas.getContext('2d');
             let W, H;
 
-            function resize() { W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight; }
+            function resize() { 
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight; 
+            }
             window.addEventListener('resize', resize);
             resize();
 
@@ -940,9 +1014,8 @@
         const bgMusic = document.getElementById('bgMusic');
         let isTransitioning = false;
 
-        // 首屏点击 → 播放音乐 + 显示倒计时
+        // 首屏点击 → 播放音乐 + 进入主界面并显示漂浮文字
         startScreen.addEventListener('click', () => {
-            // 播放音乐（与之前版本一致）
             bgMusic.play().catch(() => {});
 
             startScreen.classList.add('hidden');
@@ -950,6 +1023,10 @@
                 startScreen.style.display = 'none';
                 mainContent.style.display = 'flex';
                 setTimeout(() => birthdayCard.classList.add('visible'), 60);
+
+                // 显示漂浮文字
+                document.getElementById('floating-text').classList.add('visible');
+
                 countdownTimer = setInterval(updateCountdown, 1000);
                 updateCountdown();
             }, 800);
@@ -999,8 +1076,10 @@
             candles.forEach((_, i) => setTimeout(() => blowCandle(i), i * 150));
         }
 
-        document.getElementById('blowBtn').addEventListener('click', (e) => { e.stopPropagation();
-            blowAll(); });
+        document.getElementById('blowBtn').addEventListener('click', (e) => { 
+            e.stopPropagation();
+            blowAll(); 
+        });
         document.getElementById('candleScene').addEventListener('click', (e) => {
             if (e.target.id !== 'blowBtn' && !candleDone) blowAll();
         });
