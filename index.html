@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1a1a1e" />
-    <title>🎂 二十一 · 启程</title>
+    <title>🙇‍♂️ 致歉信</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
@@ -40,17 +39,6 @@
         :focus-visible {
             outline: 2px solid #ffd78c;
             outline-offset: 4px;
-        }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
         }
 
         #bgCanvas {
@@ -135,7 +123,7 @@
             color: rgba(255, 255, 255, 0.48);
         }
 
-        /* ─── 倒计时卡片 ─── */
+        /* ─── 内容卡片 ─── */
         #main-content {
             position: relative;
             z-index: 10;
@@ -157,7 +145,8 @@
             border-radius: 28px;
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
-            padding: 44px 36px 36px;
+            padding: 48px 36px;
+            text-align: center;
             opacity: 0;
             transform: translateY(20px) scale(0.98);
             transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
@@ -173,105 +162,12 @@
             pointer-events: none;
         }
 
-        .card-head {
-            text-align: center;
-            margin-bottom: 28px;
-        }
-        .card-head .pre {
-            font-size: 11px;
-            font-weight: 400;
-            letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.48);
-            margin-bottom: 8px;
-            display: block;
-        }
-        .card-head h1 {
-            font-weight: 500;
-            font-size: 22px;
-            letter-spacing: 1px;
-            color: #f5f5f7;
-        }
-        .card-head h1 em {
-            font-style: normal;
+        .card-text {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 3px;
             color: #ffd78c;
-            font-weight: 600;
-            text-shadow: 0 0 40px rgba(255, 215, 140, 0.08);
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 28px;
-        }
-        .cd-block {
-            text-align: center;
-            min-width: 56px;
-        }
-        .cd-block .num {
-            display: block;
-            font-weight: 600;
-            font-size: 40px;
-            line-height: 1;
-            color: #f5f5f7;
-            letter-spacing: -1px;
-            font-variant-numeric: tabular-nums;
-        }
-        .cd-block .label {
-            display: block;
-            font-size: 10px;
-            font-weight: 400;
-            letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.48);
-            margin-top: 6px;
-            text-transform: uppercase;
-        }
-        .cd-divider {
-            display: flex;
-            align-items: center;
-            color: rgba(255, 255, 255, 0.06);
-            font-size: 18px;
-            font-weight: 200;
-        }
-
-        .card-body {
-            text-align: center;
-        }
-        .card-body .line {
-            width: 24px;
-            height: 2px;
-            background: rgba(255, 215, 140, 0.2);
-            border-radius: 2px;
-            margin: 0 auto 16px;
-        }
-        .card-body p {
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 2;
-            letter-spacing: 0.3px;
-            color: rgba(255, 255, 255, 0.68);
-        }
-        .card-body p .highlight {
-            color: #f5f5f7;
-            font-weight: 500;
-        }
-
-        .hourglass-wrap {
-            margin-top: 22px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        #hgCanvas {
-            filter: drop-shadow(0 0 12px rgba(255, 215, 140, 0.05));
-            opacity: 0.6;
-        }
-        .hg-label {
-            font-size: 9px;
-            font-weight: 400;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.38);
+            text-shadow: 0 0 30px rgba(255, 215, 140, 0.2);
         }
 
         /* ─── 吹蜡烛场景 ─── */
@@ -579,10 +475,6 @@
             letter-spacing: 0.3px;
             color: rgba(255, 255, 255, 0.68);
         }
-        .wish-card p .name {
-            color: #f5f5f7;
-            font-weight: 500;
-        }
 
         .replay-btn,
         .sound-toggle {
@@ -632,54 +524,12 @@
             }
         }
 
-        @media (max-height: 680px) {
-            .card {
-                padding-top: 28px;
-                padding-bottom: 26px;
-            }
-            .card-head,
-            .countdown {
-                margin-bottom: 20px;
-            }
-            .hourglass-wrap {
-                margin-top: 14px;
-            }
-            #hgCanvas {
-                height: 58px;
-            }
-            .scene-title {
-                margin-bottom: 24px;
-            }
-            .scene-actions {
-                margin-top: 26px;
-            }
-            .wish-card {
-                padding-top: 30px;
-                padding-bottom: 26px;
-            }
-            .replay-btn {
-                margin-top: 18px;
-            }
-        }
-
         @media (max-width: 480px) {
             .card {
-                padding: 32px 20px 28px;
+                padding: 36px 20px;
             }
-            .cd-block .num {
-                font-size: 32px;
-            }
-            .countdown {
-                gap: 10px;
-            }
-            .cd-block {
-                min-width: 44px;
-            }
-            .cd-divider {
-                font-size: 16px;
-            }
-            .card-head h1 {
-                font-size: 18px;
+            .card-text {
+                font-size: 24px;
             }
             .candle-group {
                 gap: 24px;
@@ -749,43 +599,22 @@
     <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" hidden>声音：关</button>
 
     <!-- ─── 首屏 ─── -->
-    <button id="start-screen" type="button" aria-label="开启二十一岁生日倒计时">
-        <span class="start-label" aria-hidden="true">✦ 启 ✦</span>
+    <button id="start-screen" type="button" aria-label="开启致歉信">
+        <span class="start-label" aria-hidden="true">✦ 歉 ✦</span>
         <span class="start-ring" aria-hidden="true"></span>
-        <span class="start-sub"><time datetime="2027-09-05">点击开启 · 2027.09.05</time></span>
+        <span class="start-sub"><time datetime="2027-09-05">点击查收 · 诚挚致歉</time></span>
     </button>
 
-    <!-- ─── 倒计时 ─── -->
-    <main id="main-content" aria-labelledby="countdownHeading">
+    <!-- ─── 内容卡片 ─── -->
+    <main id="main-content">
         <div class="card" id="birthday-card">
-            <div class="card-head">
-                <span class="pre">— 距离 —</span>
-                <h1 id="countdownHeading">二十一岁 · <em>还有</em></h1>
-            </div>
-            <div class="countdown" aria-label="距离二十一岁生日倒计时">
-                <div class="cd-block"><span class="num" id="days">00</span><span class="label">天</span></div>
-                <div class="cd-divider">·</div>
-                <div class="cd-block"><span class="num" id="hours">00</span><span class="label">时</span></div>
-                <div class="cd-divider">·</div>
-                <div class="cd-block"><span class="num" id="mins">00</span><span class="label">分</span></div>
-                <div class="cd-divider">·</div>
-                <div class="cd-block"><span class="num" id="secs">00</span><span class="label">秒</span></div>
-            </div>
-            <p class="sr-only" id="countdownStatus" role="status" aria-live="polite"></p>
-            <div class="card-body">
-                <div class="line"></div>
-                <p>给即将二十一岁的你：<br />愿时光温柔，前路明亮。</p>
-                <div class="hourglass-wrap">
-                    <canvas id="hgCanvas" width="60" height="80" aria-hidden="true"></canvas>
-                    <div class="hg-label">时 光 流 转</div>
-                </div>
-            </div>
+            <h1 class="card-text">有种打死我</h1>
         </div>
     </main>
 
     <!-- ─── 吹蜡烛场景 ─── -->
     <section id="candleScene" role="dialog" aria-modal="true" aria-labelledby="candleSceneTitle" tabindex="-1">
-        <h2 class="scene-title" id="candleSceneTitle">✦ 许个愿吧 ✦</h2>
+        <h2 class="scene-title" id="candleSceneTitle">✦ 吹灭怒火·请求原谅 ✦</h2>
         <div class="candle-group" id="candleGroup">
             <div class="candle" id="c0">
                 <div class="flame-wrap"><div class="flame"></div><div class="flame-inner"></div><div class="smoke"></div></div>
@@ -807,22 +636,20 @@
             <div class="cake-plate"></div>
         </div>
         <div class="scene-actions">
-            <div class="blow-hint">— 点击吹灭 —</div>
-            <button class="blow-btn" id="blowBtn" type="button">吹灭蜡烛</button>
+            <div class="blow-hint">— 点击吹灭怒火 —</div>
+            <button class="blow-btn" id="blowBtn" type="button">吹灭怒火</button>
         </div>
     </section>
 
-    <!-- ─── 最终祝语 ─── -->
+    <!-- ─── 最终致歉信 ─── -->
     <section id="wishOverlay" role="dialog" aria-modal="true" aria-labelledby="wishTitle" aria-describedby="wishMessage" tabindex="-1">
         <div class="wish-card">
-            <span class="emoji" aria-hidden="true">🎂</span>
-            <h1 id="wishTitle"><span class="accent">二十一</span> · 此刻</h1>
+            <span class="emoji" aria-hidden="true">🙇‍♂️</span>
+            <h1 id="wishTitle"><span class="accent">诚挚</span> · 道歉</h1>
             <div class="line-glow"></div>
             <p id="wishMessage">
-                致 <span class="name">你</span>，<br /><br />
-                二十一岁，明亮而自由。<br />
-                去热爱，去经历，去成为自己。<br /><br />
-                不负此刻，不畏将来。
+                有种打死我！<br /><br />
+                打完消消气，原谅我好不好？
             </p>
             <button class="replay-btn" id="replayBtn" type="button">再看一次</button>
         </div>
@@ -835,12 +662,12 @@
         (function initBg() {
             const canvas = document.getElementById('bgCanvas');
             const ctx = canvas.getContext('2d');
-            let W, H;
-
-            function resize() { W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight; }
-            window.addEventListener('resize', resize);
-            resize();
+            if (!ctx) return;
+            let W = 0;
+            let H = 0;
+            let animationFrame = null;
+            const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let reduceMotion = motionQuery.matches;
 
             const glows = [
                 { dx: 0.2, dy: 0.25, color: 'rgba(255,215,140,0.04)' },
@@ -849,18 +676,29 @@
             ];
 
             const dots = [];
-            for (let i = 0; i < 120; i++) {
-                dots.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    r: Math.random() * 1 + 0.3,
-                    a: Math.random() * 0.15 + 0.02,
-                    speed: Math.random() * 0.004 + 0.001,
-                    phase: Math.random() * Math.PI * 2
-                });
+            function seedDots() {
+                dots.length = 0;
+                for (let i = 0; i < 120; i++) {
+                    dots.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        r: Math.random() * 1 + 0.3,
+                        a: Math.random() * 0.15 + 0.02,
+                        speed: Math.random() * 0.004 + 0.001,
+                        phase: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+
+            function stopAnimation() {
+                if (animationFrame !== null) {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = null;
+                }
             }
 
             function draw() {
+                animationFrame = null;
                 ctx.clearRect(0, 0, W, H);
                 const grad = ctx.createRadialGradient(W * 0.5, H * 0.4, 0, W * 0.5, H * 0.4, W * 0.8);
                 grad.addColorStop(0, '#22222a');
@@ -869,10 +707,10 @@
                 ctx.fillStyle = grad;
                 ctx.fillRect(0, 0, W, H);
 
-                const time = Date.now() * 0.0003;
+                const time = reduceMotion ? 0 : Date.now() * 0.0003;
                 glows.forEach(g => {
-                    const cx = W * g.dx + Math.sin(time * 0.3 + g.dx * 3) * W * 0.04;
-                    const cy = H * g.dy + Math.cos(time * 0.2 + g.dy * 2) * H * 0.04;
+                    const cx = W * g.dx + (reduceMotion ? 0 : Math.sin(time * 0.3 + g.dx * 3) * W * 0.04);
+                    const cy = H * g.dy + (reduceMotion ? 0 : Math.cos(time * 0.2 + g.dy * 2) * H * 0.04);
                     const r = Math.min(W, H) * 0.45;
                     ctx.save();
                     ctx.globalCompositeOperation = 'screen';
@@ -886,9 +724,9 @@
                     ctx.restore();
                 });
 
-                const t = Date.now() * 0.001;
+                const t = reduceMotion ? 0 : Date.now() * 0.001;
                 dots.forEach(d => {
-                    const alpha = d.a * (0.5 + 0.5 * Math.sin(t * d.speed + d.phase));
+                    const alpha = reduceMotion ? d.a : d.a * (0.5 + 0.5 * Math.sin(t * d.speed + d.phase));
                     ctx.globalAlpha = alpha;
                     ctx.fillStyle = 'rgba(255,255,255,0.6)';
                     ctx.beginPath();
@@ -897,174 +735,59 @@
                 });
                 ctx.globalAlpha = 1;
 
-                requestAnimationFrame(draw);
+                if (!reduceMotion && !document.hidden) {
+                    animationFrame = requestAnimationFrame(draw);
+                }
             }
-            draw();
+
+            function resize() {
+                stopAnimation();
+                W = window.innerWidth;
+                H = window.innerHeight;
+                const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+                canvas.width = Math.round(W * pixelRatio);
+                canvas.height = Math.round(H * pixelRatio);
+                canvas.style.width = `${W}px`;
+                canvas.style.height = `${H}px`;
+                ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+                seedDots();
+                draw();
+            }
+
+            function handleVisibility() {
+                if (document.hidden) {
+                    stopAnimation();
+                } else {
+                    draw();
+                }
+            }
+
+            function handleMotionPreference(event) {
+                reduceMotion = event.matches;
+                stopAnimation();
+                draw();
+            }
+
+            window.addEventListener('resize', resize);
+            document.addEventListener('visibilitychange', handleVisibility);
+            if (motionQuery.addEventListener) {
+                motionQuery.addEventListener('change', handleMotionPreference);
+            } else {
+                motionQuery.addListener(handleMotionPreference);
+            }
+            resize();
         })();
 
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 2. 倒计时 & 沙漏
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        const targetDate = new Date(2027, 8, 5, 0, 0, 0).getTime();
-        const hgStart = new Date(2026, 8, 5, 0, 0, 0).getTime();
-        const hgTotal = targetDate - hgStart;
-
-        function drawHourglass(ratio) {
-            const canvas = document.getElementById('hgCanvas');
-            if (!canvas) return;
-            const c = canvas.getContext('2d');
-            const W = canvas.width,
-                H = canvas.height;
-            c.clearRect(0, 0, W, H);
-
-            const cx = W / 2,
-                topY = 3,
-                botY = H - 3,
-                midY = H / 2;
-            const topW = W / 2 - 4,
-                neckW = 2;
-
-            function path() {
-                c.beginPath();
-                c.moveTo(cx - topW, topY);
-                c.lineTo(cx + topW, topY);
-                c.lineTo(cx + neckW, midY);
-                c.lineTo(cx + topW, botY);
-                c.lineTo(cx - topW, botY);
-                c.lineTo(cx - neckW, midY);
-                c.closePath();
-            }
-
-            function drawTop(r) {
-                if (r < 0.01) return;
-                const h = (midY - topY - 2) * r;
-                const y0 = midY - 2 - h;
-                const slope = (topW - neckW) / (midY - topY);
-                const hw = neckW + slope * (midY - 2 - y0);
-                c.save();
-                c.beginPath();
-                c.moveTo(cx - topW, topY);
-                c.lineTo(cx + topW, topY);
-                c.lineTo(cx + neckW, midY);
-                c.lineTo(cx - neckW, midY);
-                c.closePath();
-                c.clip();
-                c.beginPath();
-                c.moveTo(cx - hw, y0);
-                c.lineTo(cx + hw, y0);
-                c.lineTo(cx + neckW, midY - 2);
-                c.lineTo(cx - neckW, midY - 2);
-                c.closePath();
-                const gd = c.createLinearGradient(cx, y0, cx, midY);
-                gd.addColorStop(0, 'rgba(255,215,140,0.2)');
-                gd.addColorStop(1, 'rgba(255,215,140,0.5)');
-                c.fillStyle = gd;
-                c.fill();
-                c.restore();
-            }
-
-            function drawBot(r) {
-                const fill = 1 - r;
-                if (fill < 0.01) return;
-                const h = (botY - midY - 2) * fill;
-                const y0 = botY - 2 - h;
-                const slope = (topW - neckW) / (botY - midY);
-                const hw = neckW + slope * (y0 - midY);
-                c.save();
-                c.beginPath();
-                c.moveTo(cx + neckW, midY);
-                c.lineTo(cx + topW, botY);
-                c.lineTo(cx - topW, botY);
-                c.lineTo(cx - neckW, midY);
-                c.closePath();
-                c.clip();
-                c.beginPath();
-                c.moveTo(cx - hw, y0);
-                c.lineTo(cx + hw, y0);
-                c.lineTo(cx + topW - 2, botY - 2);
-                c.lineTo(cx - topW + 2, botY - 2);
-                c.closePath();
-                const gd = c.createLinearGradient(cx, y0, cx, botY);
-                gd.addColorStop(0, 'rgba(255,215,140,0.4)');
-                gd.addColorStop(1, 'rgba(255,215,140,0.15)');
-                c.fillStyle = gd;
-                c.fill();
-                c.restore();
-            }
-
-            function drawStream(r) {
-                if (r < 0.01) return;
-                const a = Math.min(r * 3, 0.3);
-                const gd = c.createLinearGradient(cx, midY, cx, midY + 6);
-                gd.addColorStop(0, `rgba(255,215,140,${a})`);
-                gd.addColorStop(1, 'rgba(255,215,140,0)');
-                c.strokeStyle = gd;
-                c.lineWidth = 1.2;
-                c.lineCap = 'round';
-                c.beginPath();
-                c.moveTo(cx, midY - 1);
-                c.lineTo(cx, midY + 6);
-                c.stroke();
-            }
-
-            drawTop(ratio);
-            drawBot(ratio);
-            drawStream(ratio);
-
-            path();
-            c.strokeStyle = 'rgba(255,255,255,0.04)';
-            c.lineWidth = 1;
-            c.lineJoin = 'round';
-            c.stroke();
-
-            c.strokeStyle = 'rgba(255,215,140,0.08)';
-            c.lineWidth = 1.5;
-            c.lineCap = 'round';
-            c.beginPath();
-            c.moveTo(cx - topW - 1, topY);
-            c.lineTo(cx + topW + 1, topY);
-            c.stroke();
-            c.beginPath();
-            c.moveTo(cx - topW - 1, botY);
-            c.lineTo(cx + topW + 1, botY);
-            c.stroke();
-        }
-
-        let countdownTimer;
-
-        function updateCountdown() {
-            const gap = targetDate - Date.now();
-            if (gap <= 0) {
-                ['days', 'hours', 'mins', 'secs'].forEach(id => document.getElementById(id).innerText = '00');
-                drawHourglass(0);
-                clearInterval(countdownTimer);
-                triggerTransition();
-                return;
-            }
-            const d = Math.floor(gap / 86400000);
-            const h = Math.floor((gap % 86400000) / 3600000);
-            const m = Math.floor((gap % 3600000) / 60000);
-            const s = Math.floor((gap % 60000) / 1000);
-            document.getElementById('days').innerText = d;
-            document.getElementById('hours').innerText = String(h).padStart(2, '0');
-            document.getElementById('mins').innerText = String(m).padStart(2, '0');
-            document.getElementById('secs').innerText = String(s).padStart(2, '0');
-            const ratio = Math.max(0, Math.min(1, gap / hgTotal));
-            drawHourglass(ratio);
-        }
-
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 3. 转场控制（倒计时 → 吹蜡烛）
+        // 2. 页面交互控制
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const startScreen = document.getElementById('start-screen');
         const mainContent = document.getElementById('main-content');
         const birthdayCard = document.getElementById('birthday-card');
         const bgMusic = document.getElementById('bgMusic');
-        let isTransitioning = false;
 
-        // 首屏点击 → 播放音乐 + 显示倒计时
+        // 首屏点击 → 播放音乐 + 显示致歉卡片
         startScreen.addEventListener('click', () => {
-            // 播放音乐（与之前版本一致）
             bgMusic.play().catch(() => {});
 
             startScreen.classList.add('hidden');
@@ -1072,26 +795,11 @@
                 startScreen.style.display = 'none';
                 mainContent.style.display = 'flex';
                 setTimeout(() => birthdayCard.classList.add('visible'), 60);
-                countdownTimer = setInterval(updateCountdown, 1000);
-                updateCountdown();
             }, 800);
         });
 
-        // 倒计时归零 → 自动转吹蜡烛
-        function triggerTransition() {
-            if (isTransitioning) return;
-            isTransitioning = true;
-            birthdayCard.classList.add('hide');
-            setTimeout(() => {
-                mainContent.style.display = 'none';
-                const scene = document.getElementById('candleScene');
-                scene.style.display = 'flex';
-                setTimeout(() => scene.classList.add('visible'), 80);
-            }, 700);
-        }
-
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 4. 吹蜡烛 → 最终祝语
+        // 3. 吹灭怒火 → 最终致歉信
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
         const candles = [
             document.getElementById('c0'),
@@ -1105,7 +813,7 @@
             if (!candles[idx] || candles[idx].classList.contains('blown')) return;
             candles[idx].classList.add('blown');
             const smoke = candles[idx].querySelector('.smoke');
-            smoke.classList.add('puffing');
+            if (smoke) smoke.classList.add('puffing');
             blownCount++;
             if (blownCount >= candles.length && !candleDone) {
                 candleDone = true;
@@ -1116,52 +824,43 @@
         function blowAll() {
             if (candleDone) return;
             const btn = document.getElementById('blowBtn');
-            btn.disabled = true;
-            btn.style.opacity = '0.3';
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.3';
+            }
             candles.forEach((_, i) => setTimeout(() => blowCandle(i), i * 150));
         }
 
-        document.getElementById('blowBtn').addEventListener('click', (e) => { e.stopPropagation();
-            blowAll(); });
-        document.getElementById('candleScene').addEventListener('click', (e) => {
+        document.getElementById('blowBtn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            blowAll();
+        });
+        document.getElementById('candleScene')?.addEventListener('click', (e) => {
             if (e.target.id !== 'blowBtn' && !candleDone) blowAll();
         });
 
         function showFinalWish() {
             const scene = document.getElementById('candleScene');
-            scene.classList.remove('visible');
-            scene.classList.add('hide');
-            setTimeout(() => {
-                scene.style.display = 'none';
-                const wish = document.getElementById('wishOverlay');
-                wish.classList.add('visible');
-            }, 800);
+            if (scene) {
+                scene.classList.remove('visible');
+                scene.classList.add('hide');
+                setTimeout(() => {
+                    scene.style.display = 'none';
+                    const wish = document.getElementById('wishOverlay');
+                    if (wish) wish.classList.add('visible');
+                }, 800);
+            }
         }
 
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        // 5. 自适应 & 键盘支持（空格吹灭）
-        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        window.addEventListener('resize', () => {
-            const gap = targetDate - Date.now();
-            if (gap > 0) {
-                const ratio = Math.max(0, Math.min(1, gap / hgTotal));
-                drawHourglass(ratio);
-            }
+        document.getElementById('replayBtn')?.addEventListener('click', () => {
+            location.reload();
         });
-
-        setTimeout(() => {
-            const gap = targetDate - Date.now();
-            if (gap > 0) {
-                const ratio = Math.max(0, Math.min(1, gap / hgTotal));
-                drawHourglass(ratio);
-            }
-        }, 100);
 
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' || e.key === 'Space') {
                 e.preventDefault();
                 const scene = document.getElementById('candleScene');
-                if (scene.classList.contains('visible') && !candleDone) {
+                if (scene && scene.classList.contains('visible') && !candleDone) {
                     blowAll();
                 }
             }
