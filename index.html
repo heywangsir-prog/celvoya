@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>🎂 二十 · 启程</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a1a1e" />
+    <title>🎂 二十一 · 启程</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
@@ -17,10 +19,38 @@
         body {
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100%;
+            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #1a1a1e;
             color: #f5f5f7;
+        }
+        body {
+            min-height: 100dvh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        button {
+            font: inherit;
+        }
+        button,
+        [role='button'] {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        :focus-visible {
+            outline: 2px solid #ffd78c;
+            outline-offset: 4px;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         #bgCanvas {
@@ -45,7 +75,14 @@
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             cursor: pointer;
+            border: 0;
+            color: inherit;
+            font: inherit;
+            text-align: center;
             transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        #start-screen:focus-visible {
+            outline-offset: -12px;
         }
         #start-screen.hidden {
             opacity: 0;
@@ -53,10 +90,11 @@
             pointer-events: none;
         }
         .start-label {
+            display: block;
             font-weight: 300;
             font-size: 15px;
             letter-spacing: 8px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.55);
             margin-bottom: 24px;
         }
         .start-ring {
@@ -90,10 +128,11 @@
             }
         }
         .start-sub {
+            display: block;
             font-size: 11px;
             font-weight: 400;
             letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.48);
         }
 
         /* ─── 倒计时卡片 ─── */
@@ -101,7 +140,7 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            height: 100%;
+            min-height: 100dvh;
             display: none;
             flex-direction: column;
             justify-content: center;
@@ -142,7 +181,7 @@
             font-size: 11px;
             font-weight: 400;
             letter-spacing: 4px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.48);
             margin-bottom: 8px;
             display: block;
         }
@@ -183,7 +222,7 @@
             font-size: 10px;
             font-weight: 400;
             letter-spacing: 1.5px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.48);
             margin-top: 6px;
             text-transform: uppercase;
         }
@@ -210,7 +249,7 @@
             font-weight: 400;
             line-height: 2;
             letter-spacing: 0.3px;
-            color: rgba(255, 255, 255, 0.45);
+            color: rgba(255, 255, 255, 0.68);
         }
         .card-body p .highlight {
             color: #f5f5f7;
@@ -232,7 +271,7 @@
             font-size: 9px;
             font-weight: 400;
             letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.38);
         }
 
         /* ─── 吹蜡烛场景 ─── */
@@ -247,6 +286,7 @@
             opacity: 0;
             transition: opacity 0.8s ease;
             padding: 24px;
+            overflow-y: auto;
             background: rgba(26, 26, 30, 0.5);
             backdrop-filter: blur(12px);
         }
@@ -262,7 +302,7 @@
             font-weight: 300;
             font-size: 15px;
             letter-spacing: 6px;
-            color: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
             margin-bottom: 36px;
         }
 
@@ -435,16 +475,16 @@
             font-size: 11px;
             font-weight: 400;
             letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.52);
             animation: hintPulse 3s ease-in-out infinite;
         }
         @keyframes hintPulse {
             0%,
             100% {
-                opacity: 0.3;
+                opacity: 0.72;
             }
             50% {
-                opacity: 0.7;
+                opacity: 1;
             }
         }
         .blow-btn {
@@ -483,6 +523,7 @@
             opacity: 0;
             transition: opacity 1s ease;
             padding: 24px;
+            overflow-y: auto;
             background: rgba(26, 26, 30, 0.7);
             backdrop-filter: blur(24px);
         }
@@ -536,11 +577,89 @@
             font-weight: 400;
             line-height: 2.2;
             letter-spacing: 0.3px;
-            color: rgba(255, 255, 255, 0.45);
+            color: rgba(255, 255, 255, 0.68);
         }
         .wish-card p .name {
             color: #f5f5f7;
             font-weight: 500;
+        }
+
+        .replay-btn,
+        .sound-toggle {
+            border: 1px solid rgba(255, 215, 140, 0.18);
+            border-radius: 999px;
+            background: rgba(255, 215, 140, 0.07);
+            color: rgba(255, 215, 140, 0.86);
+            cursor: pointer;
+            transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+        .replay-btn:hover,
+        .sound-toggle:hover {
+            background: rgba(255, 215, 140, 0.14);
+            border-color: rgba(255, 215, 140, 0.38);
+            color: #ffe2a6;
+        }
+        .replay-btn:active,
+        .sound-toggle:active {
+            transform: scale(0.97);
+        }
+        .replay-btn {
+            margin-top: 26px;
+            padding: 10px 22px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1.2px;
+        }
+        .sound-toggle {
+            position: fixed;
+            z-index: 110;
+            right: max(18px, env(safe-area-inset-right));
+            bottom: max(18px, env(safe-area-inset-bottom));
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (max-height: 680px) {
+            .card {
+                padding-top: 28px;
+                padding-bottom: 26px;
+            }
+            .card-head,
+            .countdown {
+                margin-bottom: 20px;
+            }
+            .hourglass-wrap {
+                margin-top: 14px;
+            }
+            #hgCanvas {
+                height: 58px;
+            }
+            .scene-title {
+                margin-bottom: 24px;
+            }
+            .scene-actions {
+                margin-top: 26px;
+            }
+            .wish-card {
+                padding-top: 30px;
+                padding-bottom: 26px;
+            }
+            .replay-btn {
+                margin-top: 18px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -624,25 +743,26 @@
 <body>
 
     <!-- ─── 音频元素 ─── -->
-    <audio id="bgMusic" src="1.mp3" loop preload="auto"></audio>
+    <audio id="bgMusic" src="1.mp3" loop preload="metadata"></audio>
 
-    <canvas id="bgCanvas"></canvas>
+    <canvas id="bgCanvas" aria-hidden="true"></canvas>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="false" hidden>声音：关</button>
 
     <!-- ─── 首屏 ─── -->
-    <div id="start-screen">
-        <div class="start-label">✦ 启 ✦</div>
-        <div class="start-ring"></div>
-        <div class="start-sub">2027.09.05</div>
-    </div>
+    <button id="start-screen" type="button" aria-label="开启二十一岁生日倒计时">
+        <span class="start-label" aria-hidden="true">✦ 启 ✦</span>
+        <span class="start-ring" aria-hidden="true"></span>
+        <span class="start-sub"><time datetime="2027-09-05">点击开启 · 2027.09.05</time></span>
+    </button>
 
     <!-- ─── 倒计时 ─── -->
-    <div id="main-content">
+    <main id="main-content" aria-labelledby="countdownHeading">
         <div class="card" id="birthday-card">
             <div class="card-head">
                 <span class="pre">— 距离 —</span>
-                <h1>二十一岁 · <em>还有</em></h1>
+                <h1 id="countdownHeading">二十一岁 · <em>还有</em></h1>
             </div>
-            <div class="countdown">
+            <div class="countdown" aria-label="距离二十一岁生日倒计时">
                 <div class="cd-block"><span class="num" id="days">00</span><span class="label">天</span></div>
                 <div class="cd-divider">·</div>
                 <div class="cd-block"><span class="num" id="hours">00</span><span class="label">时</span></div>
@@ -651,20 +771,21 @@
                 <div class="cd-divider">·</div>
                 <div class="cd-block"><span class="num" id="secs">00</span><span class="label">秒</span></div>
             </div>
+            <p class="sr-only" id="countdownStatus" role="status" aria-live="polite"></p>
             <div class="card-body">
                 <div class="line"></div>
                 <p>给即将二十一岁的你：<br />愿时光温柔，前路明亮。</p>
                 <div class="hourglass-wrap">
-                    <canvas id="hgCanvas" width="60" height="80"></canvas>
+                    <canvas id="hgCanvas" width="60" height="80" aria-hidden="true"></canvas>
                     <div class="hg-label">时 光 流 转</div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- ─── 吹蜡烛场景 ─── -->
-    <div id="candleScene">
-        <div class="scene-title">✦ 许个愿吧 ✦</div>
+    <section id="candleScene" role="dialog" aria-modal="true" aria-labelledby="candleSceneTitle" tabindex="-1">
+        <h2 class="scene-title" id="candleSceneTitle">✦ 许个愿吧 ✦</h2>
         <div class="candle-group" id="candleGroup">
             <div class="candle" id="c0">
                 <div class="flame-wrap"><div class="flame"></div><div class="flame-inner"></div><div class="smoke"></div></div>
@@ -687,24 +808,25 @@
         </div>
         <div class="scene-actions">
             <div class="blow-hint">— 点击吹灭 —</div>
-            <button class="blow-btn" id="blowBtn">吹灭蜡烛</button>
+            <button class="blow-btn" id="blowBtn" type="button">吹灭蜡烛</button>
         </div>
-    </div>
+    </section>
 
     <!-- ─── 最终祝语 ─── -->
-    <div id="wishOverlay">
+    <section id="wishOverlay" role="dialog" aria-modal="true" aria-labelledby="wishTitle" aria-describedby="wishMessage" tabindex="-1">
         <div class="wish-card">
-            <span class="emoji">🎂</span>
-            <h1><span class="accent">二十</span> · 此刻</h1>
+            <span class="emoji" aria-hidden="true">🎂</span>
+            <h1 id="wishTitle"><span class="accent">二十一</span> · 此刻</h1>
             <div class="line-glow"></div>
-            <p>
+            <p id="wishMessage">
                 致 <span class="name">你</span>，<br /><br />
                 二十一岁，明亮而自由。<br />
                 去热爱，去经历，去成为自己。<br /><br />
                 不负此刻，不畏将来。
             </p>
+            <button class="replay-btn" id="replayBtn" type="button">再看一次</button>
         </div>
-    </div>
+    </section>
 
     <script>
         // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
